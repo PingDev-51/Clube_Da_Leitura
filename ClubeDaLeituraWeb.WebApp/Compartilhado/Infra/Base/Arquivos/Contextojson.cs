@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ClubeDaLeituraWeb.WebApp.ModuloCaixa.Dominio;
+using ClubeDaLeituraWeb.WebApp.ModuloRevistas.Dominio;
 // using ClubeDaLeituraWeb.WebApp.ModuloCaixa.Dominio;
 
 namespace ClubeDaLeituraWeb.WebApp.Compartilhado.Infra.Arquivos;
@@ -8,6 +9,7 @@ namespace ClubeDaLeituraWeb.WebApp.Compartilhado.Infra.Arquivos;
 public sealed class ContextoJson
 {
     public List<Caixa> Caixas { get; set; } = new List<Caixa>();
+    public List<Revista> Revistas { get; set; } = new List<Revista>();
 
     private readonly string caminhoArquivo;
 
@@ -53,5 +55,6 @@ public sealed class ContextoJson
             return;
 
         Caixas = contextoSalvo.Caixas;
+        Revistas = contextoSalvo.Revistas;
     }
 }

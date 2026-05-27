@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Mvc.Rendering;
+
+@{
+    Layout = "_Layout";
+    ViewBag.title = "Exclusão de Revista";
+
+    List<SelectListItem> caixas = ViewBag.Caixas;
+}
+
+@model ExcluirRevistaViewModel;
+
+<div class="alert alert-danger" role="alert ">Deseja realmente excluir essa revista?</div>
+
+<form class="card border-primary-subtle shadow-sm mx-auto p-4" style="max-width: 620px;"  asp-action="Excluir" method="post">
+    
+    <div class="mb-3">
+        <label asp-for="Titulo" class="form-label fw-semibold text-primary text-uppercase small" disabled>Título</label>
+        <input asp-for="Titulo" type="text" class="form-control" disabled>
+        <span asp-validation-for="Titulo" class="text-danger small fw-semibold" disabled></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NumeroEdicao" class="form-label fw-semibold text-primary text-uppercase small" disabled>Numero da Edição</label >
+        <input asp-for="NumeroEdicao" type="number" class="form-control" disabled>
+        <span asp-validation-for="NumeroEdicao" class="text-danger small fw-semibold" disabled></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AnoPublicacao" class="form-label fw-semibold text-primary text-uppercase small" disabled>Ano de Publicação</label>
+        <input asp-for="AnoPublicacao" type="number" min="1" class="form-control" disabled>
+        <span asp-validation-for="AnoPublicacao" class="text-danger small fw-semibold" disabled></span>
+    </div>
+
+   <div class="mb-3">
+    <label asp-for="Caixa" class="form-label fw-semibold text-primary text-uppercase small" disabled>Caixa</label>
+
+    <select asp-for="Caixa" asp-items="caixas" class="form-select" disabled>
+        <option value="">Selecione uma caixa</option>
+    </select>
+
+    <span asp-validation-for="Caixa" class="text-danger small fw-semibold" disabled></span>
+</div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+        <a class="btn btn-outline-primary rounded-pill px-4" asp-action="Listar">Voltar</a>
+        <button class="btn btn-primary rounded-pill px-4" type="submit">Excluir</button>
+    </div>
+</form>
