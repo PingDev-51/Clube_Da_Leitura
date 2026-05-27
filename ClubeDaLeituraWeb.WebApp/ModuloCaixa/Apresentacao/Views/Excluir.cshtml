@@ -1,0 +1,34 @@
+@{
+    Layout = "_Layout";
+    ViewBag.title = "Excluir Caixa";
+}
+
+@model ExcluirCaixaViewModel;
+
+<div class="alert alert-danger" role="alert ">Deseja realmente excluir essa caixa?</div>
+
+<form class="card border-primary-subtle shadow-sm mx-auto p-4" style="max-width: 620px;"  asp-action="Excluir" method="post">
+    
+    <div class="mb-3">
+        <label asp-for="Etiqueta" class="form-label fw-semibold text-primary text-uppercase small" disabled>Etiqueta</label >
+        <input asp-for="Etiqueta" type="text" class="form-control" disabled>
+        <span asp-validation-for="Etiqueta" class="text-danger small fw-semibold" disabled></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Cor" class="form-label fw-semibold text-primary text-uppercase small" disabled>Cor</label>
+        <input asp-for="Cor" type="text" class="form-control" disabled>
+        <span asp-validation-for="Cor" class="text-danger small fw-semibold" disabled></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DiasDeEmprestimo" class="form-label fw-semibold text-primary text-uppercase small" disabled>Dias de Empréstimo</label>
+        <input asp-for="DiasDeEmprestimo" type="number" min="1" class="form-control" disabled>
+        <span asp-validation-for="DiasDeEmprestimo" class="text-danger small fw-semibold " disabled></span>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+        <a class="btn btn-outline-primary rounded-pill px-4" asp-action="Listar">Voltar</a>
+        <button class="btn btn-primary rounded-pill px-4" type="submit">Excluir</button>
+    </div>
+</form>
