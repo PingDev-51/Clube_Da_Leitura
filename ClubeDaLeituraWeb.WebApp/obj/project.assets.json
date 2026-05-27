@@ -8,31 +8,24 @@
     "net10.0": []
   },
   "packageFolders": {
-    "C:\\Users\\kauan\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\kauan\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kauan\\Documents\\CursoADP\\Modulo3\\Clube_Do_Livro_Web\\ClubeDaLeituraWeb.WebApp\\ClubeDaLeituraWeb.WebApp.csproj",
+      "projectUniqueName": "C:\\Users\\kauan\\Documents\\Academia-Do-Programador-FullStack\\Clube_Da_Leitura\\ClubeDaLeituraWeb.WebApp\\ClubeDaLeituraWeb.WebApp.csproj",
       "projectName": "ClubeDaLeituraWeb.WebApp",
-      "projectPath": "C:\\Users\\kauan\\Documents\\CursoADP\\Modulo3\\Clube_Do_Livro_Web\\ClubeDaLeituraWeb.WebApp\\ClubeDaLeituraWeb.WebApp.csproj",
+      "projectPath": "C:\\Users\\kauan\\Documents\\Academia-Do-Programador-FullStack\\Clube_Da_Leitura\\ClubeDaLeituraWeb.WebApp\\ClubeDaLeituraWeb.WebApp.csproj",
       "packagesPath": "C:\\Users\\kauan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kauan\\Documents\\CursoADP\\Modulo3\\Clube_Do_Livro_Web\\ClubeDaLeituraWeb.WebApp\\obj\\",
+      "outputPath": "C:\\Users\\kauan\\Documents\\Academia-Do-Programador-FullStack\\Clube_Da_Leitura\\ClubeDaLeituraWeb.WebApp\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\kauan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\kauan\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
