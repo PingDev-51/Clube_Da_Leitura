@@ -1,19 +1,25 @@
+using ClubeDaLeitura.ConsoleApp.Dominio;
+
 public record ListarEmprestimosViewModel(
     string Id,
     string Revista,
     string Amigo,
-    DateTime dataAbertura,
-    DateTime DataConclusaoPrevista
+    DateTime DataAbertura,
+    DateTime DataConclusaoPrevista,
+    StatusEmprestimo StatusEmprestimo
 );
 
 public record CadastrarEmprestimosViewModel(
     string RevistaId,
     string AmigoId,
+    DateTime DataConclusaoPrevista,
     DateTime DataAbertura
 );
 
 public record CadastrarDevolucaoViewModel(
+    string Id,
     string RevistaId,
     string AmigoId,
-    DateTime DataDevolucao
+    DateTime DataAbertura,
+    DateTime DataConclusaoPrevista
 );

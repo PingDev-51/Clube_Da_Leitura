@@ -38,10 +38,16 @@
         <label asp-for="DataAbertura" class="form-label fw-semibold text-primary text-uppercase small">
             Data de Abertura
         </label>
-
         <input asp-for="DataAbertura" type="date" class="form-control">
-
         <span asp-validation-for="DataAbertura" class="text-danger small fw-semibold"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DataAbertura" class="form-label fw-semibold text-primary text-uppercase small">
+            Data de Prevista
+        </label>
+        <input asp-for="DataConclusaoPrevista" type="date" class="form-control">
+        <span asp-validation-for="DataConclusaoPrevista" class="text-danger small fw-semibold"></span>
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-4">

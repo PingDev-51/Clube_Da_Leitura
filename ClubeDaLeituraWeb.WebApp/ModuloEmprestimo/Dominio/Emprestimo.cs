@@ -1,59 +1,76 @@
 using System.Security.Cryptography;
+using ClubeDaLeituraWeb.WebApp.Compartilhado.Dominio;
 using ClubeDaLeituraWeb.WebApp.ModuloRevistas.Dominio;
 
 namespace ClubeDaLeitura.ConsoleApp.Dominio;
 
-public class Emprestimo
+public class Emprestimo : EntidadeBase<Emprestimo>
 {
-    public string Id { get; set; } = string.Empty;
     public Revista Revista { get; set; }
     public Amigo Amigo { get; set; }
+    public StatusEmprestimo Status { get; set; }
     public DateTime DataAbertura { get; set; }
-    public DateTime DataDevolucao { get; set; }
+    public DateTime ConclusaoPrevista
+    {
+        get
+        {
+            int diasDeEmprestimo = Revista.Caixa.DiasDeEmprestimo;
 
+            DateTime conclusao = DataAbertura.AddDays(diasDeEmprestimo);
 
+            return conclusao;
+        }
+    }
+
+    public Emprestimo() { }
     public Emprestimo(Revista revista, Amigo amigo, DateTime dataAbertura)
     {
-        Id = Convert
-                .ToHexString(RandomNumberGenerator.GetBytes(4))
-                .ToLower()
-                .Substring(0, 7);
-
         Revista = revista;
         Amigo = amigo;
         DataAbertura = dataAbertura;
+        Status =
     }
 
-    public string[] Validar()
+    public override List<string> Validar()
     {
-        string erros = string.Empty;
+        List<string> erros = new List<string>();
 
         if (Revista == null)
-            erros = "O campo \"Revista\" deve ser preenchido;";
+            erros.Add("O campo \"Revista\" deve ser preenchido;");
 
         if (Amigo == null)
-            erros = "O campo \"Amigo\" deve ser preenchido;";
+            erros.Add("O campo \"Amigo\" deve ser preenchido;");
 
-        return erros.Split(';', StringSplitOptions.RemoveEmptyEntries);
+        return erros;
     }
 
-    // public void Abrir()
-    // {
-    //     DataAbertura = DateTime.Now;
-    //     Status = StatusEmprestimo.Aberto;
+    public override void AtualizarDados(Emprestimo entidadeAtualizada)
+    {
+        Revista = entidadeAtualizada.Revista;
+        Amigo = entidadeAtualizada.Amigo;
+        DataAbertura = entidadeAtualizada.DataAbertura;
+        Status = entidadeAtualizada.Status;
+    }
 
-    //     Revista.Emprestar();
-    //     Amigo.AdicionarEmprestimo(this);
-    // }
+    public void Abrir()
+    {
+        DataAbertura = DateTime.Now;
+        Status = StatusEmprestimo.Aberto;
+    }
 
-    // public void Concluir()
-    // {
-    //     Status = StatusEmprestimo.Concluido;
-    //     Revista.Devolver();
-    // }
+    public void Concluir()
+    {
+        Status = StatusEmprestimo.Concluido;
+    }
 
-    // public int ObterQuantidadeDiasAtraso(DateTime dataConclusao)
-    // {
-    //     return (dataConclusao - DataConclusaoPrevista).Days;
-    // }
+    public void Atrasado()
+    {
+        Status = StatusEmprestimo.Atrasado;
+    }
+
+
+    public int ObterQuantidadeDiasAtraso(DateTime dataConclusao)
+    {
+        return (dataConclusao - ConclusaoPrevista).Days;
+    }
 }

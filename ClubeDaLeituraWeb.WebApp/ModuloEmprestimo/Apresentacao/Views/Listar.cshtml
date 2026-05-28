@@ -38,14 +38,15 @@ else
                         <td>@e.Id</td>
                         <td>@e.Revista</td>
                         <td>@e.Amigo</td>
-                        <td>@e.dataAbertura</td>
                         <td>@e.DataConclusaoPrevista</td>
+                        <td>@e.DataAbertura.ToString(format: "dd/MM/yyyy")</td>
+                        <td>@e.StatusEmprestimo</td>
 
                         <td>
                             <div class="d-flex gap-2">
-                                <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Devolucao"
+                                <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="CadastrarDevolucao"
                                    asp-route-id="@e.Id">
-                                    Devolução
+                                    Status Emprestimo
                                 </a>
                             </div>
                         </td>
