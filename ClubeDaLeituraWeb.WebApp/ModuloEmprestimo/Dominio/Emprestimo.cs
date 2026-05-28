@@ -6,42 +6,35 @@ namespace ClubeDaLeitura.ConsoleApp.Dominio;
 
 public class Emprestimo : EntidadeBase<Emprestimo>
 {
-    public string Id { get; set; } = string.Empty;
     public Revista Revista { get; set; }
     public Amigo Amigo { get; set; }
-    public bool Status { get; set; }
+    public StatusEmprestimo Status { get; set; }
     public DateTime DataAbertura { get; set; }
-    // public DateTime ConclusaoPrevista
-    // {
-    //     get
-    //     {
-    //         int diasDeEmprestimo = Revista.Caixa.DiasDeEmprestimo;
+    public DateTime ConclusaoPrevista
+    {
+        get
+        {
+            int diasDeEmprestimo = Revista.Caixa.DiasDeEmprestimo;
 
-    //         DateTime conclusao = Abertura.AddDays(diasDeEmprestimo);
+            DateTime conclusao = DataAbertura.AddDays(diasDeEmprestimo);
 
-    //         return conclusao;
-    //     }
-    // }
+            return conclusao;
+        }
 
-    // public bool EstaAtrasado
-    // {
-    //     get
-    //     {
-    //         return Status == StatusEmprestimo.Aberto && DateTime.Now > ConclusaoPrevista;
-    //     }
-    // }
+        set
+        {
+
+        }
+    }
 
     public Emprestimo() { }
-    public Emprestimo(Revista revista, Amigo amigo, DateTime dataAbertura)
+    public Emprestimo(Revista revista, Amigo amigo, DateTime dataAbertura, DateTime dataConclusaoPrevista)
     {
-        Id = Convert
-                .ToHexString(RandomNumberGenerator.GetBytes(4))
-                .ToLower()
-                .Substring(0, 7);
-
         Revista = revista;
         Amigo = amigo;
         DataAbertura = dataAbertura;
+        ConclusaoPrevista = dataConclusaoPrevista;
+
     }
 
     public override List<string> Validar()
@@ -59,26 +52,32 @@ public class Emprestimo : EntidadeBase<Emprestimo>
 
     public override void AtualizarDados(Emprestimo entidadeAtualizada)
     {
-        throw new NotImplementedException();
+        Revista = entidadeAtualizada.Revista;
+        Amigo = entidadeAtualizada.Amigo;
+        DataAbertura = entidadeAtualizada.DataAbertura;
+        Status = entidadeAtualizada.Status;
     }
 
-    // public void Abrir()
-    // {
-    //     DataAbertura = DateTime.Now;
-    //     Status = StatusEmprestimo.Aberto;
+    public void Abrir()
+    {
+        DataAbertura = DateTime.Now;
+        Status = StatusEmprestimo.Aberto;
+    }
 
-    //     Revista.Emprestar();
-    //     Amigo.AdicionarEmprestimo(this);
-    // }
+    public void Concluir()
+    {
+        Status = StatusEmprestimo.Concluido;
+    }
 
-    // public void Concluir()
-    // {
-    //     Status = StatusEmprestimo.Concluido;
-    //     Revista.Devolver();
-    // }
+    public void Atrasado()
+    {
+        Status = StatusEmprestimo.Atrasado;
+    }
 
-    // public int ObterQuantidadeDiasAtraso(DateTime dataConclusao)
-    // {
-    //     return (dataConclusao - DataConclusaoPrevista).Days;
-    // }
+
+    public int ObterQuantidadeDiasAtraso(DateTime dataConclusao)
+    {
+        return (dataConclusao - ConclusaoPrevista).Days;
+    }
+
 }

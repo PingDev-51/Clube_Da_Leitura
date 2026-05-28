@@ -38,7 +38,7 @@ public class EmprestimoController : Controller
                 e.Revista.Titulo,
                 e.Amigo.Nome,
                 e.DataAbertura,
-                e.DataDevolucao
+                e.ConclusaoPrevista
             );
 
             listarVm.Add(listarEmprestimoVm);
@@ -57,6 +57,7 @@ public class EmprestimoController : Controller
         new CadastrarEmprestimosViewModel(
             string.Empty,
             string.Empty,
+            DateTime.Now,
             DateTime.Now
         );
 
@@ -77,7 +78,8 @@ public class EmprestimoController : Controller
         Emprestimo novoEmprestimo = new Emprestimo(
             revista,
             amigo,
-            cadastrarVm.DataAbertura
+            cadastrarVm.DataAbertura,
+            cadastrarVm.DataConclusaoPrevista
         );
         repositorioEmprestimo.Cadastrar(novoEmprestimo);
 
@@ -95,6 +97,7 @@ public class EmprestimoController : Controller
         CadastrarDevolucaoViewModel cadastrar = new CadastrarDevolucaoViewModel(
             string.Empty,
             string.Empty,
+            DateTime.Now,
             DateTime.Now
         );
 
@@ -127,7 +130,8 @@ public class EmprestimoController : Controller
         Emprestimo novoEmprestimo = new Emprestimo(
             revista,
             amigo,
-            cadastrarVm.DataDevolucao
+            cadastrarVm.DataDevolucao,
+            cadastrarVm.DataConclusaoPrevista
         );
 
 

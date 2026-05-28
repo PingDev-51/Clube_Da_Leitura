@@ -9,11 +9,13 @@ public record ListarEmprestimosViewModel(
 public record CadastrarEmprestimosViewModel(
     string RevistaId,
     string AmigoId,
-    DateTime DataAbertura
+    DateTime DataAbertura,
+    DateTime DataConclusaoPrevista
 );
 
 public record CadastrarDevolucaoViewModel(
     string RevistaId,
     string AmigoId,
-    DateTime DataDevolucao
+    DateTime DataDevolucao,
+    DateTime DataConclusaoPrevista
 );
