@@ -1,0 +1,31 @@
+@{
+    Layout = "_Layout";
+    ViewBag.title = "Exclusão de Amigos";
+}
+
+@model ExcluirAmigosViewModel;
+
+<form asp-action="Excluir" asp-route-id="@Model.Id" method="post">
+    <div>
+        <label asp-for="Nome">Nome</label>
+        <input asp-for="Nome" type="text" disabled>
+        <span asp-validation-for="Nome"></span>
+    </div>
+
+    <div>
+        <label asp-for="NomeResponsavel">Nome do Responsavel</label>
+        <input asp-for="NomeResponsavel" type="text" disabled>
+        <span asp-validation-for="NomeResponsavel"></span>
+    </div>
+
+    <div>
+        <label asp-for="Telefone">Telefone</label>
+        <input asp-for="Telefone" type="tel" disabled>
+        <span asp-validation-for="Telefone"></span>
+    </div>
+
+    <div>
+        <a asp-action="Listar">Voltar</a>
+        <button type="submit">Confirmar</button>
+    </div>
+</form>

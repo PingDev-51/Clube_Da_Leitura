@@ -1,8 +1,10 @@
+using ClubeDaLeituraWeb.WebApp.Compartilhado.Infra;
 using ClubeDaLeituraWeb.WebApp.Compartilhado.Infra.Arquivos;
+using ClubeDaLeituraWeb.WebApp.ModuloAmigo.Dominio;
 
 namespace ClubeDaLeituraWeb.WebApp.ModuloAmigo.Infra;
 
-public class RepositorioAmigoEmArquivo : RepositorioBaseEmArquivo<Amigo>
+public class RepositorioAmigoEmArquivo : RepositorioBaseEmArquivo<Amigo>, IRepositorioAmigo
 {
     public RepositorioAmigoEmArquivo(ContextoJson contexto) : base(contexto) { }
 
