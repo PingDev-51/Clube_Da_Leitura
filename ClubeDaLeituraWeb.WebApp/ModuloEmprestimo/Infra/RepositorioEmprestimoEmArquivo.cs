@@ -4,50 +4,14 @@ using ClubeDaLeituraWeb.WebApp.ModuloEmprestimo.Dominio;
 
 namespace ClubeDaLeitura.ConsoleApp.Infraestrutura;
 
-public class RepositorioEmprestimo : IRepositorio
+public class RepositorioEmprestimo : RepositorioBaseEmArquivo<Emprestimo>, IRepositorioEmprestimo
 {
-    public ContextoJson contexto = new ContextoJson();
-    List<Emprestimo> registrosDeEmpréstimo = new List<Emprestimo>();
-    public void Cadastrar(Emprestimo emprestimo)
+    public RepositorioEmprestimo(ContextoJson contexto) : base(contexto)
     {
-        registrosDeEmpréstimo.Add(emprestimo);
-
-        contexto.Salvar();
     }
 
-    public List<Emprestimo> SelecionarTodos()
+    protected override List<Emprestimo> CarregarRegistros()
     {
-        return registrosDeEmpréstimo;
-    }
-
-    public Emprestimo? SelecionarPorId(string idSelecionado)
-    {
-        foreach (Emprestimo registro in registrosDeEmpréstimo)
-        {
-            if (registro.Id == idSelecionado)
-                return registro;
-        }
-
-        return null;
-    }
-
-    public bool Excluir(Emprestimo registro)
-    {
-        bool conseguiuExcluir = registrosDeEmpréstimo.Remove(registro);
-
-        if (conseguiuExcluir)
-            contexto.Salvar();
-
-        return conseguiuExcluir;
-    }
-
-    public bool Excluir(string idSelecionado)
-    {
-        Emprestimo? EmprestimoSelecionado = SelecionarPorId(idSelecionado);
-
-        if (EmprestimoSelecionado == null)
-            return false;
-
-        return Excluir(EmprestimoSelecionado);
+        return contexto.Emprestimos;
     }
 }

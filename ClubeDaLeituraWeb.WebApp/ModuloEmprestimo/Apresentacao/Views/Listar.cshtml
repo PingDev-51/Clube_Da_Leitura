@@ -26,7 +26,7 @@ else
                     <th>Nome da Revista</th>
                     <th>Nome do Amigo</th>
                     <th>Data de Abertura</th>
-                    <th>Data de Conclusão Prevista</th>
+                    <th>Status</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -38,7 +38,7 @@ else
                         <td>@e.Id</td>
                         <td>@e.Revista</td>
                         <td>@e.Amigo</td>
-                        <td>@e.dataAbertura</td>
+                        <td>@e.dataAbertura.ToString(format: "dd/MM/yyyy")</td>
                         <td>@e.DataConclusaoPrevista</td>
 
                         <td>

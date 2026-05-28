@@ -1,17 +1,37 @@
 using System.Security.Cryptography;
+using ClubeDaLeituraWeb.WebApp.Compartilhado.Dominio;
 using ClubeDaLeituraWeb.WebApp.ModuloRevistas.Dominio;
 
 namespace ClubeDaLeitura.ConsoleApp.Dominio;
 
-public class Emprestimo
+public class Emprestimo : EntidadeBase<Emprestimo>
 {
     public string Id { get; set; } = string.Empty;
     public Revista Revista { get; set; }
     public Amigo Amigo { get; set; }
+    public bool Status { get; set; }
     public DateTime DataAbertura { get; set; }
-    public DateTime DataDevolucao { get; set; }
+    // public DateTime ConclusaoPrevista
+    // {
+    //     get
+    //     {
+    //         int diasDeEmprestimo = Revista.Caixa.DiasDeEmprestimo;
 
+    //         DateTime conclusao = Abertura.AddDays(diasDeEmprestimo);
 
+    //         return conclusao;
+    //     }
+    // }
+
+    // public bool EstaAtrasado
+    // {
+    //     get
+    //     {
+    //         return Status == StatusEmprestimo.Aberto && DateTime.Now > ConclusaoPrevista;
+    //     }
+    // }
+
+    public Emprestimo() { }
     public Emprestimo(Revista revista, Amigo amigo, DateTime dataAbertura)
     {
         Id = Convert
@@ -24,17 +44,22 @@ public class Emprestimo
         DataAbertura = dataAbertura;
     }
 
-    public string[] Validar()
+    public override List<string> Validar()
     {
-        string erros = string.Empty;
+        List<string> erros = new List<string>();
 
         if (Revista == null)
-            erros = "O campo \"Revista\" deve ser preenchido;";
+            erros.Add("O campo \"Revista\" deve ser preenchido;");
 
         if (Amigo == null)
-            erros = "O campo \"Amigo\" deve ser preenchido;";
+            erros.Add("O campo \"Amigo\" deve ser preenchido;");
 
-        return erros.Split(';', StringSplitOptions.RemoveEmptyEntries);
+        return erros;
+    }
+
+    public override void AtualizarDados(Emprestimo entidadeAtualizada)
+    {
+        throw new NotImplementedException();
     }
 
     // public void Abrir()

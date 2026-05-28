@@ -22,7 +22,7 @@ builder.Services.AddScoped<ContextoJson>((IServiceProvider provider) =>
 builder.Services.AddScoped<IRepositorioCaixa, RepositorioCaixaEmArquivo>();
 builder.Services.AddScoped<IRepositorioRevista, RepositorioRevistaEmArquivo>();
 builder.Services.AddScoped<IRepositorioAmigo, RepositorioAmigoEmArquivo>();
-builder.Services.AddScoped<IRepositorio, RepositorioEmprestimo>();
+builder.Services.AddScoped<IRepositorioEmprestimo, RepositorioEmprestimo>();
 
 builder.Services.AddControllersWithViews().AddRazorOptions(options =>
 {
