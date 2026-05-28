@@ -1,41 +1,53 @@
 using ClubeDaLeitura.ConsoleApp.Dominio;
+using ClubeDaLeituraWeb.WebApp.Compartilhado.Infra.Arquivos;
+using ClubeDaLeituraWeb.WebApp.ModuloEmprestimo.Dominio;
 
 namespace ClubeDaLeitura.ConsoleApp.Infraestrutura;
 
-public class RepositorioEmprestimo
+public class RepositorioEmprestimo : IRepositorio
 {
-    private Emprestimo?[] emprestimos = new Emprestimo[100];
-
+    public ContextoJson contexto = new ContextoJson();
+    List<Emprestimo> registrosDeEmpréstimo = new List<Emprestimo>();
     public void Cadastrar(Emprestimo emprestimo)
     {
-        for (int i = 0; i < emprestimos.Length; i++)
-        {
-            if (emprestimos[i] == null)
-            {
-                emprestimos[i] = emprestimo;
-                break;
-            }
-        }
+        registrosDeEmpréstimo.Add(emprestimo);
+
+        contexto.Salvar();
     }
 
-    public Emprestimo?[] SelecionarTodos()
+    public List<Emprestimo> SelecionarTodos()
     {
-        return emprestimos;
+        return registrosDeEmpréstimo;
     }
 
     public Emprestimo? SelecionarPorId(string idSelecionado)
     {
-        for (int i = 0; i < emprestimos.Length; i++)
+        foreach (Emprestimo registro in registrosDeEmpréstimo)
         {
-            Emprestimo? e = emprestimos[i];
-
-            if (e == null)
-                continue;
-
-            if (e.Id == idSelecionado)
-                return e;
+            if (registro.Id == idSelecionado)
+                return registro;
         }
 
         return null;
+    }
+
+    public bool Excluir(Emprestimo registro)
+    {
+        bool conseguiuExcluir = registrosDeEmpréstimo.Remove(registro);
+
+        if (conseguiuExcluir)
+            contexto.Salvar();
+
+        return conseguiuExcluir;
+    }
+
+    public bool Excluir(string idSelecionado)
+    {
+        Emprestimo? EmprestimoSelecionado = SelecionarPorId(idSelecionado);
+
+        if (EmprestimoSelecionado == null)
+            return false;
+
+        return Excluir(EmprestimoSelecionado);
     }
 }
