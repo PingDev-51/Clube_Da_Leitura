@@ -1,0 +1,49 @@
+@{
+    Layout = "_Layout";
+    ViewBag.title = "Lista de Amigos";
+
+}
+
+@model List<ListarAmigosViewModel>;
+
+<a asp-action="Cadastrar">Cadastrar Novo</a>
+
+@if (Model.Count == 0)
+{
+    <div>
+        Nenhum Amigo foi encontrado.
+    </div>
+}
+else
+{
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Nome do Responsavel</th>
+                    <th>Telefone</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (ListarAmigosViewModel a in Model)
+                {
+                    <tr>
+                        <td>@a.Id</td>
+                        <td>@a.Nome</td>
+                        <td>@a.NomeResponsavel</td>
+                        <td>@a.Telefone</td>
+                        <td>
+                            <div>
+                                <a asp-action="Editar" asp-route-id="@a.Id">Editar</a>
+                                <a asp-action="Excluir" asp-route-id="@a.Id">>Excluir</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
