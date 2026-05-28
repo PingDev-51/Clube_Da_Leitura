@@ -28,7 +28,6 @@ public class Emprestimo : EntidadeBase<Emprestimo>
         Revista = revista;
         Amigo = amigo;
         DataAbertura = dataAbertura;
-        Status =
     }
 
     public override List<string> Validar()
