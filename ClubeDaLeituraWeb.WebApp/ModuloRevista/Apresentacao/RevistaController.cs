@@ -201,12 +201,12 @@ public class RevistaController : Controller
 
         foreach (Caixa e in caixas)
         {
-            SelectListItem selecionarEquipamentoVm = new SelectListItem(
+            SelectListItem selecionarRevistaVm = new SelectListItem(
                 e.Etiqueta,
                 e.Id
             );
 
-            selecionarCaixas.Add(selecionarEquipamentoVm);
+            selecionarCaixas.Add(selecionarRevistaVm);
         }
         return selecionarCaixas;
     }

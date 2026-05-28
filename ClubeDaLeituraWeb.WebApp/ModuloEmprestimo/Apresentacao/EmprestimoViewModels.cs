@@ -7,8 +7,13 @@ public record ListarEmprestimosViewModel(
 );
 
 public record CadastrarEmprestimosViewModel(
-    string Revista,
-    string Amigo,
-    DateTime dataAbertura,
-    DateTime DataConclusaoPrevista
+    string RevistaId,
+    string AmigoId,
+    DateTime DataAbertura
+);
+
+public record CadastrarDevolucaoViewModel(
+    string RevistaId,
+    string AmigoId,
+    DateTime DataDevolucao
 );

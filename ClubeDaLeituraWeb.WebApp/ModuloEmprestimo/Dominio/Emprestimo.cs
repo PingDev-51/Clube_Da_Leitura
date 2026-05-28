@@ -5,14 +5,14 @@ namespace ClubeDaLeitura.ConsoleApp.Dominio;
 
 public class Emprestimo
 {
-    public string Id { get; private set; } = string.Empty;
-    public Revista Revista { get; private set; }
-    public Amigo Amigo { get; private set; }
-    public DateTime DataAbertura { get; private set; }
-    public DateTime DataConclusaoPrevista { get; private set; }
+    public string Id { get; set; } = string.Empty;
+    public Revista Revista { get; set; }
+    public Amigo Amigo { get; set; }
+    public DateTime DataAbertura { get; set; }
+    public DateTime DataDevolucao { get; set; }
 
 
-    public Emprestimo(Revista revista, Amigo amigo)
+    public Emprestimo(Revista revista, Amigo amigo, DateTime dataAbertura)
     {
         Id = Convert
                 .ToHexString(RandomNumberGenerator.GetBytes(4))
@@ -21,6 +21,7 @@ public class Emprestimo
 
         Revista = revista;
         Amigo = amigo;
+        DataAbertura = dataAbertura;
     }
 
     public string[] Validar()

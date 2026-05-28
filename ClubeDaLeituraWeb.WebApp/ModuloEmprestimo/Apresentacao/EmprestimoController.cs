@@ -37,7 +37,7 @@ public class EmprestimoController : Controller
                 e.Revista.Titulo,
                 e.Amigo.Nome,
                 e.DataAbertura,
-                e.DataConclusaoPrevista
+                e.DataDevolucao
             );
 
             listarVm.Add(listarEmprestimoVm);
@@ -53,7 +53,86 @@ public class EmprestimoController : Controller
         ViewBag.Revista = CarregarRevista();
         ViewBag.Amigo = CarregarAmigo();
 
+        new CadastrarEmprestimosViewModel(
+            string.Empty,
+            string.Empty,
+            DateTime.Now
+        );
+
         return View();
+    }
+
+    [HttpPost]
+    public ActionResult Cadastrar(CadastrarEmprestimosViewModel cadastrarVm)
+    {
+        Revista? revista = repositorioRevista.SelecionarPorId(cadastrarVm.RevistaId);
+        Amigo? amigo = repositorioAmigo.SelecionarPorId(cadastrarVm.AmigoId);
+
+        if (revista == null)
+            return RedirectToAction(nameof(Listar));
+        if (amigo == null)
+            return RedirectToAction(nameof(Listar));
+
+        Emprestimo novoEmprestimo = new Emprestimo(
+            revista,
+            amigo,
+            cadastrarVm.DataAbertura
+        );
+        repositorioEmprestimo.Cadastrar(novoEmprestimo);
+
+        return RedirectToAction(nameof(Listar));
+    }
+
+    [HttpGet]
+    public ActionResult CadastrarDevolucao(string id)
+    {
+        Emprestimo? emprestimo = repositorioEmprestimo.SelecionarPorId(id);
+
+        if (emprestimo == null)
+            return RedirectToAction(nameof(Listar));
+
+        CadastrarDevolucaoViewModel cadastrar = new CadastrarDevolucaoViewModel(
+            string.Empty,
+            string.Empty,
+            DateTime.Now
+        );
+
+        ViewBag.Revista = CarregarRevista();
+        ViewBag.Amigo = CarregarAmigo();
+
+        return View(cadastrar);
+    }
+
+    [HttpPost]
+    public ActionResult CadastrarDevolucao(CadastrarDevolucaoViewModel cadastrarVm)
+    {
+
+        Revista? revista = repositorioRevista.SelecionarPorId(cadastrarVm.RevistaId);
+        Amigo? amigo = repositorioAmigo.SelecionarPorId(cadastrarVm.AmigoId);
+
+        if (revista == null)
+            return RedirectToAction(nameof(Listar));
+
+        if (amigo == null)
+            return RedirectToAction(nameof(Listar));
+
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Revista = CarregarRevista();
+
+            return View(cadastrarVm);
+        }
+        Emprestimo novoEmprestimo = new Emprestimo(
+            revista,
+            amigo,
+            cadastrarVm.DataDevolucao
+        );
+
+
+        repositorioEmprestimo.Cadastrar(novoEmprestimo);
+
+        return RedirectToAction(nameof(Listar));
     }
 
     private List<SelectListItem> CarregarRevista()
