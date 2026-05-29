@@ -11,15 +11,16 @@ public class Revista : EntidadeBase<Revista>
     public int AnoPublicacao { get; set; }
     // public int StatusRevista { get; set; }
     public Caixa Caixa { get; set; }
-    // public StatusRevista Status {get; set; }
+    public StatusRevista Status { get; set; } = StatusRevista.Disponivel;
 
-    public Revista(string titulo, int numeroEdicao, int anoPublicacao, Caixa caixa)
+    public Revista(string titulo, int numeroEdicao, int anoPublicacao, Caixa caixa, StatusRevista status = StatusRevista.Disponivel)
     {
 
         Titulo = titulo;
         NumeroEdicao = numeroEdicao;
         AnoPublicacao = anoPublicacao;
         Caixa = caixa;
+        Status = status;
     }
 
     public Revista()
@@ -67,8 +68,8 @@ public class Revista : EntidadeBase<Revista>
         NumeroEdicao = revistaAtualizada.NumeroEdicao;
         AnoPublicacao = revistaAtualizada.AnoPublicacao;
         Caixa = revistaAtualizada.Caixa;
+        Status = revistaAtualizada.Status;
     }
-
     // public void Emprestar()
     // {
     //     Status = Dominio.StatusRevista.Emprestada;

@@ -1,7 +1,6 @@
-using System.Security.Cryptography;
 using ClubeDaLeituraWeb.WebApp.Compartilhado.Dominio;
+using ClubeDaLeituraWeb.WebApp.ModuloAmigo.Dominio;
 using ClubeDaLeituraWeb.WebApp.ModuloRevistas.Dominio;
-
 namespace ClubeDaLeitura.ConsoleApp.Dominio;
 
 public class Emprestimo : EntidadeBase<Emprestimo>

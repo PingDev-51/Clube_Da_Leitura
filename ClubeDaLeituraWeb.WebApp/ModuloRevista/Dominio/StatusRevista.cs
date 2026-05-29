@@ -1,4 +1,4 @@
-namespace ClubeDaLeituraWeb.WebApp.ModuloRevista.Dominio;
+namespace ClubeDaLeituraWeb.WebApp.ModuloRevistas.Dominio;
 
 public enum StatusRevista
 {

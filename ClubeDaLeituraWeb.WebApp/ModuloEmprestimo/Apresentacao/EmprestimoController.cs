@@ -2,6 +2,7 @@ using ClubeDaLeitura.ConsoleApp.Dominio;
 using ClubeDaLeitura.ConsoleApp.Infraestrutura;
 using ClubeDaLeituraWeb.WebApp.Compartilhado.Infra;
 using ClubeDaLeituraWeb.WebApp.ModuloAmigo.Dominio;
+using ClubeDaLeituraWeb.WebApp.ModuloEmprestimo.Apresentacao;
 using ClubeDaLeituraWeb.WebApp.ModuloEmprestimo.Dominio;
 using ClubeDaLeituraWeb.WebApp.ModuloRevistas.Apresentacao;
 using ClubeDaLeituraWeb.WebApp.ModuloRevistas.Dominio;
@@ -16,7 +17,10 @@ public class EmprestimoController : Controller
     private readonly IRepositorioRevista repositorioRevista;
     private readonly IRepositorioAmigo repositorioAmigo;
 
-    public EmprestimoController(IRepositorioEmprestimo repositorioEmprestimo, IRepositorioRevista repositorioRevista, IRepositorioAmigo repositorioAmigo)
+    public EmprestimoController(
+        IRepositorioEmprestimo repositorioEmprestimo,
+        IRepositorioRevista repositorioRevista,
+        IRepositorioAmigo repositorioAmigo)
     {
         this.repositorioEmprestimo = repositorioEmprestimo;
         this.repositorioRevista = repositorioRevista;
@@ -29,158 +33,131 @@ public class EmprestimoController : Controller
     {
         List<Emprestimo> emprestimos = repositorioEmprestimo.SelecionarTodos();
 
-        List<ListarEmprestimosViewModel> listarVm = new List<ListarEmprestimosViewModel>();
-
-        foreach (Emprestimo e in emprestimos)
-        {
-            ListarEmprestimosViewModel listarEmprestimoVm = new ListarEmprestimosViewModel(
-                e.Id,
-                e.Revista.Titulo,
-                e.Amigo.Nome,
-                e.DataAbertura,
-                e.Status,
-                e.Status
-            );
-
-            listarVm.Add(listarEmprestimoVm);
-        }
-
-        return View(listarVm);
+        return View(MapearEmprestimos(emprestimos));
     }
 
     [HttpGet]
-
     public ActionResult Cadastrar()
     {
-        ViewBag.Revista = CarregarRevista();
-        ViewBag.Amigo = CarregarAmigo();
-
-        new CadastrarEmprestimosViewModel(
+        CadastrarEmprestimoViewModel cadastrarVm = new CadastrarEmprestimoViewModel(
             string.Empty,
             string.Empty,
-            DateTime.Now,
-            DateTime.Now
+            SelecionarAmigos(),
+            SelecionarRevistasDisponiveis()
         );
 
-        return View();
+        return View(cadastrarVm);
     }
 
     [HttpPost]
-    public ActionResult Cadastrar(CadastrarEmprestimosViewModel cadastrarVm)
+    public ActionResult Cadastrar(CadastrarEmprestimoViewModel cadastrarVm)
     {
-        Revista? revista = repositorioRevista.SelecionarPorId(cadastrarVm.RevistaId);
-        Amigo? amigo = repositorioAmigo.SelecionarPorId(cadastrarVm.AmigoId);
+        Amigo? amigoSelecionado = repositorioAmigo.SelecionarPorId(cadastrarVm.AmigoId);
+        Revista? revistaSelecionada = repositorioRevista.SelecionarPorId(cadastrarVm.RevistaId);
 
-        if (revista == null)
-            return RedirectToAction(nameof(Listar));
-        if (amigo == null)
-            return RedirectToAction(nameof(Listar));
+        if (amigoSelecionado == null)
+            ModelState.AddModelError(nameof(cadastrarVm.AmigoId), "Selecione um amigo válido.");
+
+        if (revistaSelecionada == null)
+            ModelState.AddModelError(nameof(cadastrarVm.RevistaId), "Selecione uma revista válida.");
+
+        else if (revistaSelecionada.Status != StatusRevista.Disponivel)
+            ModelState.AddModelError(nameof(cadastrarVm.RevistaId), "Selecione uma revista disponível.");
+
+        if (!ModelState.IsValid)
+            return View(cadastrarVm with
+            {
+                Amigos = SelecionarAmigos(),
+                Revistas = SelecionarRevistasDisponiveis()
+            });
+
+        DateTime dataEmprestimo = DateTime.Today;
+        DateTime dataDevolucao = dataEmprestimo.AddDays(revistaSelecionada!.Caixa.DiasDeEmprestimo);
 
         Emprestimo novoEmprestimo = new Emprestimo(
-            revista,
-            amigo,
-            cadastrarVm.DataAbertura,
-            cadastrarVm.DataConclusaoPrevista
+            amigoSelecionado!,
+            revistaSelecionada,
+            dataEmprestimo,
+            dataDevolucao
         );
+
+        revistaSelecionada.Status = StatusRevista.Emprestada;
+
         repositorioEmprestimo.Cadastrar(novoEmprestimo);
 
         return RedirectToAction(nameof(Listar));
     }
 
     [HttpGet]
-    public ActionResult CadastrarDevolucao(string id)
+    public ActionResult Devolver(string id)
     {
         Emprestimo? emprestimo = repositorioEmprestimo.SelecionarPorId(id);
 
-        if (emprestimo == null)
+        if (emprestimo == null || emprestimo.DataDevolvido.HasValue)
             return RedirectToAction(nameof(Listar));
 
-        CadastrarDevolucaoViewModel cadastrar = new CadastrarDevolucaoViewModel(
-            string.Empty,
-            string.Empty,
-            DateTime.Now,
-            DateTime.Now
+        DevolverEmprestimoViewModel devolverVm = new DevolverEmprestimoViewModel(
+            id,
+            emprestimo.Amigo.Nome,
+            emprestimo.Revista.Titulo,
+            emprestimo.DataEmprestimo,
+            emprestimo.DataDevolucao
         );
 
-        ViewBag.Revista = CarregarRevista();
-        ViewBag.Amigo = CarregarAmigo();
-
-        return View(cadastrar);
+        return View(devolverVm);
     }
 
     [HttpPost]
-    public ActionResult CadastrarDevolucao(CadastrarDevolucaoViewModel cadastrarVm)
+    public ActionResult Devolver(DevolverEmprestimoViewModel devolverVm)
     {
+        Emprestimo? emprestimo = repositorioEmprestimo.SelecionarPorId(devolverVm.Id);
 
-        Revista? revista = repositorioRevista.SelecionarPorId(cadastrarVm.RevistaId);
-        Amigo? amigo = repositorioAmigo.SelecionarPorId(cadastrarVm.AmigoId);
-
-        if (revista == null)
-            return RedirectToAction(nameof(Listar));
-
-        if (amigo == null)
-            return RedirectToAction(nameof(Listar));
-
-
-        if (!ModelState.IsValid)
+        if (emprestimo != null && !emprestimo.DataDevolvido.HasValue)
         {
-            ViewBag.Revista = CarregarRevista();
+            emprestimo.RegistrarDevolucao();
 
-            return View(cadastrarVm);
+            repositorioEmprestimo.Editar(emprestimo.Id, emprestimo);
         }
-        Emprestimo novoEmprestimo = new Emprestimo(
-            revista,
-            amigo,
-            cadastrarVm.DataAbertura,
-            cadastrarVm.DataConclusaoPrevista
-        );
-
-
-        repositorioEmprestimo.Cadastrar(novoEmprestimo);
 
         return RedirectToAction(nameof(Listar));
     }
-
-    private List<ListarRevistasViewModel> CarregarRevista()
+    private List<ListarEmprestimosViewModel> MapearEmprestimos(List<Emprestimo> emprestimos)
     {
-        List<Revista> revistas = repositorioRevista.SelecionarTodos();
+        List<ListarEmprestimosViewModel> listarVms = emprestimos.Select(e => new ListarEmprestimosViewModel(
+            e.Id,
+            e.Amigo.Nome,
+            e.Revista.Titulo,
+            e.DataEmprestimo,
+            e.DataDevolucao,
+            e.DataDevolvido,
+            FormatarStatus(e.Status),
+            e.Status == StatusEmprestimo.Atrasado
+        )).ToList();
 
-        List<ListarRevistasViewModel> selecionarRevistas = new List<ListarRevistasViewModel>();
-
-
-        foreach (Revista r in revistas)
-        {
-            ListarRevistasViewModel selecionarRevistaVm = new ListarRevistasViewModel(
-                r.Id,
-                r.Titulo,
-                r.AnoPublicacao,
-                r.NumeroEdicao,
-                r.Caixa.Etiqueta
-            );
-
-            selecionarRevistas.Add(selecionarRevistaVm);
-        }
-        return selecionarRevistas;
+        return listarVms;
     }
 
-    private List<ListarAmigosViewModel> CarregarAmigo()
+    private string FormatarStatus(StatusEmprestimo status)
     {
-        List<Amigo> amigos = repositorioAmigo.SelecionarTodos();
-
-        List<ListarAmigosViewModel> selecionarAmigos = new List<ListarAmigosViewModel>();
-
-
-        foreach (Amigo a in amigos)
+        switch (status)
         {
-            ListarAmigosViewModel selecionarAmigoVm = new ListarAmigosViewModel(
-                a.Id,
-                a.Nome,
-                a.NomeResponsavel,
-                a.Telefone
-            );
-
-            selecionarAmigos.Add(selecionarAmigoVm);
+            case StatusEmprestimo.Concluido: return "Concluído";
+            case StatusEmprestimo.Atrasado: return "Atrasado";
+            default: return "Aberto";
         }
-        return selecionarAmigos;
+    }
+
+    private List<OpcaoAmigoViewModel> SelecionarAmigos()
+    {
+        return repositorioAmigo.SelecionarTodos()
+            .Select(a => new OpcaoAmigoViewModel(a.Id, a.Nome))
+            .ToList();
+    }
+
+    private List<OpcaoRevistaViewModel> SelecionarRevistasDisponiveis()
+    {
+        return repositorioRevista.Filtrar(r => r.Status == StatusRevista.Disponivel)
+            .Select(r => new OpcaoRevistaViewModel(r.Id, $"{r.Titulo} #{r.NumeroEdicao}"))
+            .ToList();
     }
 }
