@@ -13,6 +13,6 @@ public class RepositorioEmprestimo : RepositorioBaseEmArquivo<Emprestimo>, IRepo
 
     protected override List<Emprestimo> CarregarRegistros()
     {
-        return contexto.emprestimos;
+        return contexto.Emprestimos;
     }
 }

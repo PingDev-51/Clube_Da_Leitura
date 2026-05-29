@@ -38,7 +38,7 @@ public class EmprestimoController : Controller
                 e.Revista.Titulo,
                 e.Amigo.Nome,
                 e.DataAbertura,
-                e.ConclusaoPrevista,
+                e.Status,
                 e.Status
             );
 
