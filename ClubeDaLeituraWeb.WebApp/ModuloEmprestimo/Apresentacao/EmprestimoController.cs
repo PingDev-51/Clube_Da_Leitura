@@ -3,6 +3,7 @@ using ClubeDaLeitura.ConsoleApp.Infraestrutura;
 using ClubeDaLeituraWeb.WebApp.Compartilhado.Infra;
 using ClubeDaLeituraWeb.WebApp.ModuloAmigo.Dominio;
 using ClubeDaLeituraWeb.WebApp.ModuloEmprestimo.Dominio;
+using ClubeDaLeituraWeb.WebApp.ModuloRevistas.Apresentacao;
 using ClubeDaLeituraWeb.WebApp.ModuloRevistas.Dominio;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,7 +27,7 @@ public class EmprestimoController : Controller
     [HttpGet]
     public ActionResult Listar()
     {
-        List<Emprestimo> emprestimos = new List<Emprestimo>();
+        List<Emprestimo> emprestimos = repositorioEmprestimo.SelecionarTodos();
 
         List<ListarEmprestimosViewModel> listarVm = new List<ListarEmprestimosViewModel>();
 
@@ -37,7 +38,8 @@ public class EmprestimoController : Controller
                 e.Revista.Titulo,
                 e.Amigo.Nome,
                 e.DataAbertura,
-                e.DataDevolucao
+                e.ConclusaoPrevista,
+                e.Status
             );
 
             listarVm.Add(listarEmprestimoVm);
@@ -56,6 +58,7 @@ public class EmprestimoController : Controller
         new CadastrarEmprestimosViewModel(
             string.Empty,
             string.Empty,
+            DateTime.Now,
             DateTime.Now
         );
 
@@ -76,7 +79,8 @@ public class EmprestimoController : Controller
         Emprestimo novoEmprestimo = new Emprestimo(
             revista,
             amigo,
-            cadastrarVm.DataAbertura
+            cadastrarVm.DataAbertura,
+            cadastrarVm.DataConclusaoPrevista
         );
         repositorioEmprestimo.Cadastrar(novoEmprestimo);
 
@@ -94,6 +98,7 @@ public class EmprestimoController : Controller
         CadastrarDevolucaoViewModel cadastrar = new CadastrarDevolucaoViewModel(
             string.Empty,
             string.Empty,
+            DateTime.Now,
             DateTime.Now
         );
 
@@ -126,7 +131,8 @@ public class EmprestimoController : Controller
         Emprestimo novoEmprestimo = new Emprestimo(
             revista,
             amigo,
-            cadastrarVm.DataDevolucao
+            cadastrarVm.DataAbertura,
+            cadastrarVm.DataConclusaoPrevista
         );
 
 
@@ -135,18 +141,21 @@ public class EmprestimoController : Controller
         return RedirectToAction(nameof(Listar));
     }
 
-    private List<SelectListItem> CarregarRevista()
+    private List<ListarRevistasViewModel> CarregarRevista()
     {
         List<Revista> revistas = repositorioRevista.SelecionarTodos();
 
-        List<SelectListItem> selecionarRevistas = new List<SelectListItem>();
+        List<ListarRevistasViewModel> selecionarRevistas = new List<ListarRevistasViewModel>();
 
 
         foreach (Revista r in revistas)
         {
-            SelectListItem selecionarRevistaVm = new SelectListItem(
+            ListarRevistasViewModel selecionarRevistaVm = new ListarRevistasViewModel(
                 r.Id,
-                r.Titulo
+                r.Titulo,
+                r.AnoPublicacao,
+                r.NumeroEdicao,
+                r.Caixa.Etiqueta
             );
 
             selecionarRevistas.Add(selecionarRevistaVm);
@@ -154,18 +163,20 @@ public class EmprestimoController : Controller
         return selecionarRevistas;
     }
 
-    private List<SelectListItem> CarregarAmigo()
+    private List<ListarAmigosViewModel> CarregarAmigo()
     {
-        List<Amigo> amigoss = repositorioAmigo.SelecionarTodos();
+        List<Amigo> amigos = repositorioAmigo.SelecionarTodos();
 
-        List<SelectListItem> selecionarAmigos = new List<SelectListItem>();
+        List<ListarAmigosViewModel> selecionarAmigos = new List<ListarAmigosViewModel>();
 
 
-        foreach (Amigo a in amigoss)
+        foreach (Amigo a in amigos)
         {
-            SelectListItem selecionarAmigoVm = new SelectListItem(
+            ListarAmigosViewModel selecionarAmigoVm = new ListarAmigosViewModel(
                 a.Id,
-                a.Nome
+                a.Nome,
+                a.NomeResponsavel,
+                a.Telefone
             );
 
             selecionarAmigos.Add(selecionarAmigoVm);

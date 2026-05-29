@@ -23,7 +23,7 @@ public class Emprestimo : EntidadeBase<Emprestimo>
     }
 
     public Emprestimo() { }
-    public Emprestimo(Revista revista, Amigo amigo, DateTime dataAbertura)
+    public Emprestimo(Revista revista, Amigo amigo, DateTime dataAbertura, DateTime DataPrevista)
     {
         Revista = revista;
         Amigo = amigo;

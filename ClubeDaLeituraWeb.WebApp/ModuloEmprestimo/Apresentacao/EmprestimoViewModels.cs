@@ -17,7 +17,6 @@ public record CadastrarEmprestimosViewModel(
 );
 
 public record CadastrarDevolucaoViewModel(
-    string Id,
     string RevistaId,
     string AmigoId,
     DateTime DataAbertura,
