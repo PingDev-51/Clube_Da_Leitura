@@ -1,9 +1,6 @@
+using ClubeDaLeitura.ConsoleApp.Dominio;
+using ClubeDaLeituraWeb.WebApp.Compartilhado.Infra;
+
 namespace ClubeDaLeituraWeb.WebApp.ModuloEmprestimo.Dominio;
 
-public interface IRepositorioEmprestimo<Emprestimo>
-{
-    void Cadastrar(Emprestimo emprestimo);
-    List<Emprestimo> SelecionarTodos();
-    Emprestimo? SelecionarPorId(string idSelecionado);
-    bool Excluir(Emprestimo registro);
-}
+public interface IRepositorioEmprestimo : IRepositorio<Emprestimo>;

@@ -12,11 +12,11 @@ namespace ClubeDaLeituraWeb.WebApp.ModuloEmprestimo.Apresetacao;
 
 public class EmprestimoController : Controller
 {
-    private readonly IRepositorio repositorioEmprestimo;
+    private readonly IRepositorioEmprestimo repositorioEmprestimo;
     private readonly IRepositorioRevista repositorioRevista;
     private readonly IRepositorioAmigo repositorioAmigo;
 
-    public EmprestimoController(IRepositorio repositorioEmprestimo, IRepositorioRevista repositorioRevista, IRepositorioAmigo repositorioAmigo)
+    public EmprestimoController(IRepositorioEmprestimo repositorioEmprestimo, IRepositorioRevista repositorioRevista, IRepositorioAmigo repositorioAmigo)
     {
         this.repositorioEmprestimo = repositorioEmprestimo;
         this.repositorioRevista = repositorioRevista;
