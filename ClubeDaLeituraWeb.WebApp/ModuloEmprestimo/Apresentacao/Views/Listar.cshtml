@@ -26,34 +26,34 @@ else
                     <th>Nome da Revista</th>
                     <th>Nome do Amigo</th>
                     <th>Data de Abertura</th>
-                    <th>Data de Conclusão Prevista</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (ListarEmprestimosViewModel e in Model)
-                {
-                    <tr>
-                        <td>@e.Id</td>
-                        <td>@e.Revista</td>
-                        <td>@e.Amigo</td>
-                        <td>@e.DataConclusaoPrevista</td>
-                        <td>@e.DataAbertura.ToString(format: "dd/MM/yyyy")</td>
-                        <td>@e.StatusEmprestimo</td>
-
-                        <td>
-                            <div class="d-flex gap-2">
-                                <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="CadastrarDevolucao"
-                                   asp-route-id="@e.Id">
-                                    Status Emprestimo
-                                </a>
-                            </div>
-                        </td>
+                    <th>Status/th>
+                        <th>Ações</th>
                     </tr>
-                }
-            </tbody>
+                </thead>
 
-        </table>
-    </div>
-}
+                <tbody>
+                    @foreach (ListarEmprestimosViewModel e in Model)
+                    {
+                        <tr>
+                            <td>@e.Id</td>
+                            <td>@e.Revista</td>
+                            <td>@e.Amigo</td>
+                            <td>@e.DataConclusaoPrevista</td>
+                            <td>@e.DataAbertura.ToString(format: "dd/MM/yyyy")</td>
+                            <td>@e.StatusEmprestimo</td>
+
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="CadastrarDevolucao"
+                                       asp-route-id="@e.Id">
+                                        Status Emprestimo
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    }
