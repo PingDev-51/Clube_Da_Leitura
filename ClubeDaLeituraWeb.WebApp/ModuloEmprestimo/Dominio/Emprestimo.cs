@@ -1,40 +1,35 @@
-using System.Security.Cryptography;
 using ClubeDaLeituraWeb.WebApp.Compartilhado.Dominio;
+using ClubeDaLeituraWeb.WebApp.ModuloAmigo.Dominio;
 using ClubeDaLeituraWeb.WebApp.ModuloRevistas.Dominio;
-
 namespace ClubeDaLeitura.ConsoleApp.Dominio;
 
 public class Emprestimo : EntidadeBase<Emprestimo>
 {
     public Revista Revista { get; set; }
     public Amigo Amigo { get; set; }
-    public StatusEmprestimo Status { get; set; }
-    public DateTime DataAbertura { get; set; }
-    public DateTime ConclusaoPrevista
+    public DateTime DataEmprestimo { get; set; }
+    public DateTime DataDevolucao { get; set; }
+    public DateTime? DataDevolvido { get; set; }
+    public StatusEmprestimo Status
     {
         get
         {
-            int diasDeEmprestimo = Revista.Caixa.DiasDeEmprestimo;
+            if (DataDevolvido.HasValue)
+                return StatusEmprestimo.Concluido;
+            if (DateTime.Today > DataDevolucao.Date)
+                return StatusEmprestimo.Atrasado;
 
-            DateTime conclusao = DataAbertura.AddDays(diasDeEmprestimo);
-
-            return conclusao;
-        }
-
-        set
-        {
-
+            return StatusEmprestimo.Aberto;
         }
     }
 
     public Emprestimo() { }
-    public Emprestimo(Revista revista, Amigo amigo, DateTime dataAbertura, DateTime dataConclusaoPrevista)
+    public Emprestimo(Amigo amigo, Revista revista, DateTime dataEmprestimo, DateTime dataDevolucao)
     {
-        Revista = revista;
         Amigo = amigo;
-        DataAbertura = dataAbertura;
-        ConclusaoPrevista = dataConclusaoPrevista;
-
+        Revista = revista;
+        DataEmprestimo = dataEmprestimo;
+        DataDevolucao = dataDevolucao;
     }
 
     public override List<string> Validar()
@@ -50,34 +45,18 @@ public class Emprestimo : EntidadeBase<Emprestimo>
         return erros;
     }
 
+    public void RegistrarDevolucao()
+    {
+        DataDevolvido = DateTime.Today;
+        Revista.Status = StatusRevista.Disponivel;
+    }
+
     public override void AtualizarDados(Emprestimo entidadeAtualizada)
     {
-        Revista = entidadeAtualizada.Revista;
         Amigo = entidadeAtualizada.Amigo;
-        DataAbertura = entidadeAtualizada.DataAbertura;
-        Status = entidadeAtualizada.Status;
+        Revista = entidadeAtualizada.Revista;
+        DataEmprestimo = entidadeAtualizada.DataEmprestimo;
+        DataDevolucao = entidadeAtualizada.DataDevolucao;
+        DataDevolvido = entidadeAtualizada.DataDevolvido;
     }
-
-    public void Abrir()
-    {
-        DataAbertura = DateTime.Now;
-        Status = StatusEmprestimo.Aberto;
-    }
-
-    public void Concluir()
-    {
-        Status = StatusEmprestimo.Concluido;
-    }
-
-    public void Atrasado()
-    {
-        Status = StatusEmprestimo.Atrasado;
-    }
-
-
-    public int ObterQuantidadeDiasAtraso(DateTime dataConclusao)
-    {
-        return (dataConclusao - ConclusaoPrevista).Days;
-    }
-
 }

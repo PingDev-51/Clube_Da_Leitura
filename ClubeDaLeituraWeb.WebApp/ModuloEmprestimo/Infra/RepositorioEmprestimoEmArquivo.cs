@@ -1,4 +1,5 @@
 using ClubeDaLeitura.ConsoleApp.Dominio;
+using ClubeDaLeituraWeb.WebApp.Compartilhado.Infra;
 using ClubeDaLeituraWeb.WebApp.Compartilhado.Infra.Arquivos;
 using ClubeDaLeituraWeb.WebApp.ModuloEmprestimo.Dominio;
 

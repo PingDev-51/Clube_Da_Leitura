@@ -1,67 +1,53 @@
 @{
     Layout = "_Layout";
-    ViewBag.title = "Cadastro de Empréstimo";
-
-    List<ListarRevistasViewModel> revistas = ViewBag.Revista;
-    List<ListarAmigosViewModel> amigos = ViewBag.Amigo;
+    ViewBag.Titulo = "Registro de Empréstimo";
 }
 
-@model CadastrarEmprestimosViewModel;
+@model CadastrarEmprestimoViewModel;
+
+@if (Model.Amigos.Count == 0 || Model.Revistas.Count == 0)
+{
+    <div class="alert alert-primary border-start border-primary border-4 rounded-3 mx-auto" style="max-width: 620px;"
+         role="alert">
+        Cadastre amigos e revistas disponíveis antes de registrar empréstimos.
+    </div>
+}
 
 <form class="card border-primary-subtle shadow-sm mx-auto p-4" style="max-width: 620px;" asp-action="Cadastrar"
       method="post">
-
     <div class="mb-3">
-        <label asp-for="RevistaId" class="form-label fw-semibold text-primary text-uppercase small">
-            Revista
-        </label>
-
-        <select asp-for="RevistaId" class="form-select">
-            <option value="">Selecione um Revista</option>
-
-            @foreach (ListarRevistasViewModel r in revistas)
-            {
-                <option value="@r.Id">@r.Titulo</option>
-            }
-        </select>
-
-        <span asp-validation-for="RevistaId" class="text-danger small fw-semibold"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="AmigoId" class="form-label fw-semibold text-primary text-uppercase small">
-            Amigo
-        </label>
-
+        <label asp-for="AmigoId" class="form-label fw-semibold text-primary text-uppercase small">Amigo</label>
         <select asp-for="AmigoId" class="form-select">
-            <option value="">Selecione um Amigo</option>
-
-            @foreach (ListarAmigosViewModel a in amigos)
+            <option value="">Selecione um amigo</option>
+            @foreach (OpcaoAmigoViewModel amigo in Model.Amigos)
             {
-                <option value="@a.Id">@a.Nome</option>
+                <option value="@amigo.Id">@amigo.Nome</option>
             }
         </select>
-
         <span asp-validation-for="AmigoId" class="text-danger small fw-semibold"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="DataAbertura" class="form-label fw-semibold text-primary text-uppercase small">
-            Data de Abertura
-        </label>
-
-        <input asp-for="DataAbertura" type="date" class="form-control">
-
-        <span asp-validation-for="DataAbertura" class="text-danger small fw-semibold"></span>
+        <label asp-for="RevistaId" class="form-label fw-semibold text-primary text-uppercase small">Revista</label>
+        <select asp-for="RevistaId" class="form-select">
+            <option value="">Selecione uma revista</option>
+            @foreach (OpcaoRevistaViewModel revista in Model.Revistas)
+            {
+                <option value="@revista.Id">@revista.Titulo</option>
+            }
+        </select>
+        <span asp-validation-for="RevistaId" class="text-danger small fw-semibold"></span>
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-4">
-        <a class="btn btn-outline-primary rounded-pill px-4" asp-action="Listar">
-            Voltar
-        </a>
-
-        <button class="btn btn-primary rounded-pill px-4" type="submit">
-            Confirmar
-        </button>
+        <a class="btn btn-outline-primary rounded-pill px-4" asp-action="Listar">Voltar</a>
+        @if (Model.Amigos.Count == 0 || Model.Revistas.Count == 0)
+        {
+            <button class="btn btn-primary rounded-pill px-4" type="submit" disabled>Confirmar</button>
+        }
+        else
+        {
+            <button class="btn btn-primary rounded-pill px-4" type="submit">Confirmar</button>
+        }
     </div>
 </form>
