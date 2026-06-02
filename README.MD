@@ -2,7 +2,7 @@
 
 # 📚 Clube da Leitura
 
-### Sistema de gerenciamento de empréstimos de revistas em quadrinhos desenvolvido em **ASP.NET MVC com POO**
+### Sistema de gerenciamento de empréstimos de revistas em **ASP.NET MVC com POO**
 Controle de caixas, revistas, amigos e empréstimos com separação de responsabilidades e regras de negócio reais.
 
 ---
